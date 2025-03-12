@@ -1,0 +1,186 @@
+LMS Project Documentation
+
+Overview
+
+The LMS (Library Management System) is a web-based application that allows admins and librarians to manage books, borrow books, return books, and register new clients. The system consists of two main parts:
+
+Backend: A Flask API that communicates with Firebase for database operations.
+
+Frontend: A Django-based web interface that interacts with the backend.
+
+Backend (Flask) Setup
+
+1. Prerequisites
+
+Install Python (3.9 or later)
+
+Install virtual environment module: pip install virtualenv
+
+2. Installation Steps
+
+Clone the repository:
+
+git clone <repository-url>
+cd lms
+
+Create a virtual environment and activate it:
+
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+Configure Firebase:
+
+Obtain the firebase_config.json file from the admin.
+
+Place it in the root directory of the backend project.
+
+Ensure .gitignore includes firebase_config.json to keep credentials safe.
+
+Run the Flask server:
+
+python app.py
+
+API Endpoints:
+
+POST /auth/register - Register a new user
+
+POST /auth/login - Login a user
+
+GET /books/ - List all books
+
+POST /books/ - Add a new book
+
+POST /borrow/ - Borrow a book
+
+POST /return/ - Return a book
+
+Frontend (Django) Setup
+
+1. Prerequisites
+
+Install Python (3.9 or later)
+
+Install virtual environment module: pip install virtualenv
+
+Ensure Flask backend is running
+
+2. Installation Steps
+
+Navigate to the Django project:
+
+cd lms_django
+
+Create and activate a virtual environment:
+
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+Apply migrations:
+
+python manage.py makemigrations
+python manage.py migrate
+
+Create a superuser (only once per project):
+
+python manage.py createsuperuser
+
+Enter a username, email, and password.
+
+Only one superuser is needed; others do not need to create one.
+
+Run the Django server:
+
+python manage.py runserver
+
+Access the application:
+
+Admin Panel: http://127.0.0.1:8000/admin/
+
+Login Page: http://127.0.0.1:8000/login/
+
+Project Structure
+
+Backend (Flask)
+
+LMS Backend/
+├── app.py                    # Main application file
+├── requirements.txt           # Dependencies
+├── README.md                  # Project Documentation
+├── config.py                  # Configuration settings
+├── firebase_config.json       # Firebase credentials (Not in Git)
+├── scripts/                   # Utility scripts
+│   ├── install_deps.bat       # Windows installation script
+│   ├── install_deps.sh        # Linux/Mac installation script
+│   ├── upd-ver.bat            # Version management script
+├── routes/                    # API route handlers
+│   ├── auth_routes.py         # Librarian/admin authentication
+│   ├── book_routes.py         # Book management routes
+│   ├── borrow_routes.py       # Borrowing-related routes
+├── models/                    # Data models
+│   ├── user_model.py          # Librarian/Admin schema
+│   ├── book_model.py          # Book schema
+├── services/                  # Business logic
+│   ├── auth_service.py        # Authentication logic
+│   ├── book_service.py        # Book management logic
+│   ├── borrow_service.py      # Borrow tracking logic
+├── static/                    # Frontend assets (if using Flask templates)
+├── templates/                 # HTML files (if using Flask for frontend)
+├── tests/                     # Test scripts
+├── docs/                      # Documentation files
+├── .gitignore                 # Ignore files (e.g., Firebase credentials)
+├── LICENSE                    # MIT License
+└── .github/                    # GitHub workflows
+    ├── ISSUE_TEMPLATE/        # GitHub issue templates
+    ├── PULL_REQUEST_TEMPLATE.md
+ 
+
+Frontend (Django)
+
+Lms Frontend lms_django/
+├── books/
+│   ├── templates/books/
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   ├── dashboard.html
+│   │   ├── book_list.html
+│   │   ├── add_book.html
+│   │   ├── borrow_book.html
+│   │   ├── return_book.html
+│   ├── views.py
+│   ├── urls.py
+│   ├── models.py
+│   ├── forms.py
+│   ├── admin.py
+├── lms_django/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── templates/base.html
+├── manage.py
+
+User Roles
+
+Admin Privileges:
+
+Manage books (add, update, delete)
+
+View borrowing history
+
+Manage librarian accounts
+
+Librarian Privileges:
+
+Search books
+
+Borrow books
+
+Return books
+
+Register new clients
