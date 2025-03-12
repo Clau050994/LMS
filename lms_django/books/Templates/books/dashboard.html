@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="mt-5">Dashboard</h2>
+    <p>Welcome, {{ user.username }} ({{ user.role }})</p>
+
+    {% if user.role == "admin" %}
+        <a href="{% url 'add_book' %}" class="btn btn-primary">Add Book</a>
+        <a href="{% url 'book_list' %}" class="btn btn-info">Manage Books</a>
+    {% else %}
+        <a href="{% url 'search_books' %}" class="btn btn-secondary">Search Books</a>
+        <a href="{% url 'borrow_book' %}" class="btn btn-warning">Borrow Book</a>
+        <a href="{% url 'return_book' %}" class="btn btn-danger">Return Book</a>
+    {% endif %}
+</div>
+{% endblock %}
