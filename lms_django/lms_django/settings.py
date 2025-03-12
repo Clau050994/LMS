@@ -12,15 +12,28 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Define BASE_DIR as the main project directory (LMS)
+BASE_DIR = Path(__file__).resolve().parent.parent  # lms_django directory
 
+# Explicitly load the .env file from the main LMS directory
+dotenv_path = os.path.join(BASE_DIR, "..", ".env")  # Move up one level
+load_dotenv(dotenv_path=dotenv_path)  # Load .env
+
+# Fetch SECRET_KEY from environment variables
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY is missing. Check your .env file.")
+
+# Debugging step: Print SECRET_KEY to confirm it's loading
+print(f"Loaded SECRET_KEY: {SECRET_KEY}")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-
+DEBUG = True  # Change to False in production
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
@@ -44,8 +57,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 LOGIN_URL = "/login/"  # This should match the login URL in your urls.py
 LOGIN_REDIRECT_URL = "dashboard"  # Redirect to dashboard after login
 LOGOUT_REDIRECT_URL = "login"  # Redirect to login page after logout
-
-
 
 
 MIDDLEWARE = [
@@ -126,8 +137,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 AUTH_USER_MODEL = "books.User"
