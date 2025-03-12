@@ -58,18 +58,14 @@ Ensure you have the following installed:
 - **Firebase Account** (for Firestore database)
 - **Virtual Environment (`venv`)**
 
-## 💾 Installation
-
 ### 🔹 **Clone the Repository**
 
 git clone https://github.com/yourusername/LMS.git
 cd LMS
 
-## 🔹 Create a Virtual Environment
+### 🔹 Create a Virtual Environment
 python -m venv venv
-source venv/bin/activate  
-
-## 💾 Installation
+source venv/bin/activate
 
 ### 🔹 Clone the Repository
 git clone https://github.com/yourusername/LMS.git
@@ -81,12 +77,12 @@ python -m venv venv
 ### 🔹 Install Dependencies
 pip install -r requirements.txt
 
-# 🚀 Running the Project
+## 🚀 Running the Project
 
 ### 🔹 Step 1: Apply Migrations for Django (Frontend - lms_django)
 cd lms_django
 
-## Apply Migrations for Django
+### Apply Migrations for Django
 python manage.py makemigrations
 python manage.py migrate
 
