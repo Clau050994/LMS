@@ -1,16 +1,57 @@
-{% extends "base.html" %}
-{% block content %}
-<div class="container">
-    <h2 class="mt-5">Dashboard</h2>
-    <p>Welcome, {{ user.username }} ({{ user.role }})</p>
+{% extends 'base.html' %}
+{% load static %}
 
-    {% if user.role == "admin" %}
-        <a href="{% url 'add_book' %}" class="btn btn-primary">Add Book</a>
-        <a href="{% url 'book_list' %}" class="btn btn-info">Manage Books</a>
-    {% else %}
-        <a href="{% url 'search_books' %}" class="btn btn-secondary">Search Books</a>
-        <a href="{% url 'borrow_book' %}" class="btn btn-warning">Borrow Book</a>
-        <a href="{% url 'return_book' %}" class="btn btn-danger">Return Book</a>
-    {% endif %}
+{% block content %}
+<style>
+    body {
+        background-color: #111;
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .login-card {
+        background-color: #222;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        max-width: 400px;
+        margin: auto;
+        margin-top: 100px;
+    }
+    .btn-lms {
+        width: 100%;
+        padding: 10px;
+        font-weight: bold;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        display: inline-block;
+        text-decoration: none;
+    }
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="login-card">
+    <h1>Welcome to LMS System</h1>
+    
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_username">Username:</label>
+            <input type="text" name="username" class="form-control" id="id_username" required>
+        </div>
+        <div class="mb-3">
+            <label for="id_password">Password:</label>
+            <input type="password" name="password" class="form-control" id="id_password" required>
+        </div>
+        <button type="submit" class="btn-lms">Login as Librarian</button>
+    </form>
+
+    <a href="/admin" class="btn-lms">Admin Access</a>
 </div>
 {% endblock %}

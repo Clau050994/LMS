@@ -24,7 +24,7 @@ def dashboard(request):
     if hasattr(request.user, "role") and request.user.role == "admin":
         return render(request, "books/dashboard_admin.html")
     else:
-        return render(request, "books/dashboard_librarian.html")
+        return render(request, "books/dashboard.html")
 
 @login_required
 def search_books(request):

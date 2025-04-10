@@ -21,6 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent  # lms_django directory
 dotenv_path = os.path.join(BASE_DIR, "..", ".env")  # Move up one level
 load_dotenv(dotenv_path=dotenv_path)  # Load .env
 
+# Debugging: Print the dotenv path and SECRET_KEY to check if it's loading
+print(f"Loading dotenv from: {dotenv_path}")
+print(f"Loaded SECRET_KEY: {os.getenv('DJANGO_SECRET_KEY')}")
+
 # Fetch SECRET_KEY from environment variables
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
