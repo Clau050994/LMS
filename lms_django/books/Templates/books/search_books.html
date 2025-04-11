@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 text-white">
+    <h2 class="text-center mb-4">Search Books</h2>
+
+    <form method="get" class="d-flex justify-content-center mb-4">
+        <input type="text" name="query" class="form-control w-50" placeholder="Enter book title..." value="{{ query }}">
+        <button type="submit" class="btn btn-primary ms-2">Search</button>
+    </form>
+
+    {% if books %}
+    <div class="card bg-dark text-white">
+        <div class="card-body">
+            <h5 class="card-title">Results</h5>
+            <ul class="list-group list-group-flush">
+                {% for book in books %}
+                <li class="list-group-item bg-dark text-white border-bottom">
+                    <strong>{{ book.title }}</strong><br>
+                    <small>Author: {{ book.author }}</small><br>
+                    <small>Genre: {{ book.genre }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% elif query %}
+    <div class="alert alert-warning text-center">
+        No books found for "<strong>{{ query }}</strong>"
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
