@@ -1,4 +1,4 @@
-from config import db
+from lms_backend.config import db
 
 # Test Firebase connection
 def test_firestore():

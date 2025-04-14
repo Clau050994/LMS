@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Edit Book</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label>Book ID to Edit:</label>
+      <input type="text" name="book_id" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label>New Title:</label>
+      <input type="text" name="title" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>New Author:</label>
+      <input type="text" name="author" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>New Genre:</label>
+      <input type="text" name="genre" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-warning">Update Book</button>
+  </form>
+</div>
+{% endblock %}

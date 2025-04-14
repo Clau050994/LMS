@@ -3,6 +3,12 @@ from routes.auth_routes import auth_bp
 from routes.book_routes import book_bp
 from routes.borrow_routes import borrow_bp
 
+import sys
+import os
+
+# Ensure the current folder is in the import path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 app = Flask(__name__)
 
 # Register Blueprints (Routes)

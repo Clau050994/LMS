@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #111;
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-container {
+        text-align: center;
+        margin-top: 80px;
+    }
+
+    .dashboard-container h2 {
+        margin-bottom: 40px;
+        font-size: 2rem;
+    }
+
+    .dashboard-btn {
+        padding: 15px 25px;
+        margin: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 8px;
+        border: 2px solid;
+        background-color: transparent;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-green { border-color: #28a745; color: #28a745; }
+    .btn-green:hover { background-color: #28a745; color: #fff; }
+
+    .btn-blue { border-color: #007bff; color: #007bff; }
+    .btn-blue:hover { background-color: #007bff; color: #fff; }
+
+    .btn-red { border-color: #dc3545; color: #dc3545; }
+    .btn-red:hover { background-color: #dc3545; color: #fff; }
+
+    .btn-yellow { border-color: #ffc107; color: #ffc107; }
+    .btn-yellow:hover { background-color: #ffc107; color: #111; }
+
+    .btn-white { border-color: white; color: white; }
+    .btn-white:hover { background-color: white; color: #111; }
+</style>
+
+<div class="dashboard-container">
+    <h2>📘 Admin Dashboard</h2>
+
+    <a href="{% url 'register_employee' %}" class="dashboard-btn btn-green">➕ Register New Employee</a>
+    <a href="{% url 'search_books' %}" class="dashboard-btn btn-blue">📚 View Book Inventory</a>
+    <a href="{% url 'borrow_book' %}" class="dashboard-btn btn-red">🗑️ Remove a Book</a>
+    <a href="{% url 'return_book' %}" class="dashboard-btn btn-green">➕ Add a Book</a>
+    <a href="{% url 'return_book' %}" class="dashboard-btn btn-yellow">✏️ Edit a Book</a>
+    <a href="{% url 'admin:index' %}" target="_blank" class="dashboard-btn btn-white">⚙️ Open Django Admin Panel</a>
+</div>
+{% endblock %}
+

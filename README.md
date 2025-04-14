@@ -19,10 +19,10 @@ The **Library Management System (LMS)** is a book inventory system designed for 
 ---
 
 ## 📖 Overview
-
-LMS helps library staff streamline book tracking and management. 
-It is built in **Python** using **Flask** for the backend and integrates with **Firebase** for real-time database management. The frontend is implemented using **Django** with a simple UI for managing book operations.
-
+LMS helps library staff streamline book tracking and management.  
+- Backend: **Python + Flask + Firebase (Firestore)**  
+- Frontend: **Django** with a simple UI  
+- Role-based login and restricted access to routes
 
 
 ---
@@ -30,23 +30,17 @@ It is built in **Python** using **Flask** for the backend and integrates with **
 ## ✨ Features
 
 ### 🏢 **Librarian Features**
-- 🔍 **Search Books** by title, author, or genre.
-- 📖 **Check Book Availability** and borrowing history.
-- 📥 **Borrow Books** and track due dates.
-- 📤 **Return Books** after completion.
-- 👤 **Register New Clients** (Library Users).
+- 🔍 Search books by title
+- 📥 Borrow and 📤 return books
+- 👤 Register new library users
 
 ### 🔧 **Admin Features**
-- 📘 **Add New Books** with metadata (Title, Author, Genre).
-- ✏️ **Update Book Information** when needed.
-- ❌ **Remove Books** that are no longer available.
-- 🔑 **User Role Management**: Assign librarians and administrators.
+- 📘 Add, ✏️ edit, ❌ delete books
+- 🔑 Manage user roles
 
-### 🔒 **Security Features**
-- 🔑 **Role-Based Access Control**: Only admins can modify book records.
-- 🔐 **Password Encryption**: Secure librarian and admin accounts.
-
----
+### 🔒 **Security**
+- Role-based access (Admin & Librarian)
+- Basic password protection (to be enhanced with encryption)
 
 ## 💾 Installation
 
@@ -79,7 +73,7 @@ pip install -r requirements.txt
 
 ## 🚀 Running the Project
 
-### 🔹 Step 1: Apply Migrations for Django (Frontend - lms_django)
+### 🔹 Step 1: Run the Django Frontend(lms_django)
 cd lms_django
 
 ### Apply Migrations for Django
@@ -90,8 +84,8 @@ python manage.py migrate
 python manage.py runserver
 
 ### 🔹 Step 3: Run the Flask Backend (Backend - lms)
-cd lms  # Go to the backend folder
-source ../venv/bin/activate  # Activate virtual environment
+cd lms_backend
+source ../.venv/bin/activate  # On Windows use `../.venv/Scripts/activate`
 
 #### Run the backend server:
 python app.py

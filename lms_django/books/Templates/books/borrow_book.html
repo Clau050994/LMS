@@ -1,12 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h2 class="mt-5">Borrow a Book</h2>
-    <form method="post" class="mt-3">
-        {% csrf_token %}
-        <label for="book_id">Book ID:</label>
-        <input type="text" name="book_id" class="form-control" required>
-        <button type="submit" class="btn btn-warning mt-3">Borrow</button>
-    </form>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">📚 Rent a Book</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <!-- Select Client -->
+    <div class="mb-3">
+      <label for="client" class="form-label">Select Client</label>
+      <select name="client_id" id="client" class="form-select" required>
+        <option value="">-- Choose Client --</option>
+        {% for client in clients %}
+          <option value="{{ client.id }}">{{ client.full_name }} ({{ client.email }})</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Select Book -->
+    <div class="mb-3">
+      <label for="book" class="form-label">Select Book</label>
+      <select name="book_id" id="book" class="form-select" required>
+        <option value="">-- Choose Book --</option>
+        {% for book in books %}
+          <option value="{{ book.id }}">{{ book.title }} by {{ book.author }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-success px-4">Confirm Rental</button>
+      <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+  </form>
 </div>
-{% end block %}
+{% endblock %}

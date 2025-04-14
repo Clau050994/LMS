@@ -1,32 +1,52 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container mt-5 text-white">
     <h2 class="text-center mb-4">Search Books</h2>
 
+    <!-- Search form -->
     <form method="get" class="d-flex justify-content-center mb-4">
         <input type="text" name="query" class="form-control w-50" placeholder="Enter book title..." value="{{ query }}">
         <button type="submit" class="btn btn-primary ms-2">Search</button>
     </form>
 
+    <!-- Search results -->
     {% if books %}
-    <div class="card bg-dark text-white">
-        <div class="card-body">
-            <h5 class="card-title">Results</h5>
-            <ul class="list-group list-group-flush">
-                {% for book in books %}
-                <li class="list-group-item bg-dark text-white border-bottom">
-                    <strong>{{ book.title }}</strong><br>
-                    <small>Author: {{ book.author }}</small><br>
-                    <small>Genre: {{ book.genre }}</small>
-                </li>
-                {% endfor %}
-            </ul>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for book in books %}
+        <div class="col">
+            <div class="card h-100 bg-secondary text-white border-light shadow">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Author:</strong> {{ book.author }}</li>
+                        <li><strong>Genre:</strong> {{ book.genre }}</li>
+                        <li><strong>Id:</strong> {{ book.id }}</li>
+                        <li><strong>ISBN:</strong> {{ book.isbn }}</li>
+                        <li><strong>Rented By:</strong> {{ book.rented_by|default:"None" }}</li>
+                        <li>
+                            <strong>Available:</strong>
+                            {% if book.rented_by %}
+                                No
+                            {% else %}
+                                Yes
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        {% endfor %}
     </div>
     {% elif query %}
     <div class="alert alert-warning text-center">
         No books found for "<strong>{{ query }}</strong>"
     </div>
     {% endif %}
+
+    <!-- Back button -->
+    <div class="text-center mt-5">
+        <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary btn-lg px-4">← Back to Dashboard</a>
+    </div>
 </div>
 {% endblock %}
