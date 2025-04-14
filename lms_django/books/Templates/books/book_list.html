@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+
 {% block content %}
 <div class="container">
     <h2 class="mt-5">Library Books</h2>
@@ -8,6 +9,7 @@
                 <th>Title</th>
                 <th>Author</th>
                 <th>Genre</th>
+                <th>ISBN</th>
                 {% if user.role == "admin" %}
                     <th>Actions</th>
                 {% endif %}
@@ -19,19 +21,20 @@
                 <td>{{ book.title }}</td>
                 <td>{{ book.author }}</td>
                 <td>{{ book.genre }}</td>
+                <td>{{ book.isbn|default:"N/A" }}</td>
                 {% if user.role == "admin" %}
                     <td>
-                        <a href="#" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="{% url 'edit_book' book.id %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_book' book.id %}" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 {% endif %}
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">No books available.</td>
+                <td colspan="5">No books available.</td>
             </tr>
-            {% end for %}
+            {% endfor %}
         </tbody>
     </table>
 </div>
-{% end block %}
+{% endblock %}

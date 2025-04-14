@@ -95,6 +95,7 @@
         <div class="book-title">{{ book.title }}</div>
         <div class="book-info"><strong>Author:</strong> {{ book.author }}</div>
         <div class="book-info"><strong>Genre:</strong> {{ book.genre }}</div>
+        <div class="book-info"><strong>ISBN:</strong> {{ book.isbn|default:"N/A" }}</div>
         <div>
           <a href="{% url 'edit_book' book.id %}" class="btn-action btn-edit">Edit</a>
           <a href="{% url 'delete_book' book.id %}" class="btn-action btn-delete">Delete</a>

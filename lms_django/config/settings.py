@@ -32,9 +32,8 @@ INSTALLED_APPS = [
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-LOGIN_URL = "/login/"
-LOGIN_REDIRECT_URL = "dashboard"
-LOGOUT_REDIRECT_URL = "login"
+LOGIN_URL = "login"  # use named URL instead of raw string path
+LOGOUT_REDIRECT_URL = "dashboard"  # use named URL instead of raw string path
 
 # ✅ Middleware
 MIDDLEWARE = [
