@@ -54,10 +54,10 @@
     <h2>📘 Admin Dashboard</h2>
 
     <a href="{% url 'register_employee' %}" class="dashboard-btn btn-green">➕ Register New Employee</a>
-    <a href="{% url 'search_books' %}" class="dashboard-btn btn-blue">📚 View Book Inventory</a>
-    <a href="{% url 'borrow_book' %}" class="dashboard-btn btn-red">🗑️ Remove a Book</a>
-    <a href="{% url 'return_book' %}" class="dashboard-btn btn-green">➕ Add a Book</a>
-    <a href="{% url 'return_book' %}" class="dashboard-btn btn-yellow">✏️ Edit a Book</a>
+    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-blue">📚 View Book Inventory</a>
+    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-red">🗑️ Remove a Book</a>
+    <a href="{% url 'add_book' %}" class="dashboard-btn btn-green">➕ Add a Book</a>
+    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-yellow">✏️ Edit a Book</a>
     <a href="{% url 'admin:index' %}" target="_blank" class="dashboard-btn btn-white">⚙️ Open Django Admin Panel</a>
 </div>
 {% endblock %}
