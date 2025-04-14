@@ -57,9 +57,15 @@
         <!-- Hidden input to track which button was pressed -->
         <input type="hidden" name="next_role" id="next_role" value="librarian">
 
-        <button type="submit" onclick="document.getElementById('next_role').value='librarian'">Login as Librarian</button>
-        <button type="submit" onclick="document.getElementById('next_role').value='admin'">Login as Admin</button>
+        <!-- <button type="submit" onclick="document.getElementById('next_role').value='librarian'">Login as Librarian</button>
+        <button type="submit" onclick="document.getElementById('next_role').value='admin'">Login as Admin</button> -->
+        <button type="submit" class="btn btn-primary">Login</button>
     </form>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger mt-3">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
 </div>
 
 </body>

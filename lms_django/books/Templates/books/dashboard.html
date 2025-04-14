@@ -49,10 +49,16 @@
             <label for="id_password">Password:</label>
             <input type="password" name="password" class="form-control" id="id_password" required>
         </div>
-        <button type="submit" class="btn-lms">Login as Librarian</button>
+        <!-- <button type="submit" class="btn-lms">Login as Librarian</button> -->
+        <button type="submit" class="btn-lms">Login</button>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-danger mt-3">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
     </form>
 
-    <a href="{% url 'dashboard_admin' %}" class="btn-lms">Admin Dashboard Access</a>
+    <!-- <a href="{% url 'dashboard_admin' %}" class="btn-lms">Admin Dashboard Access</a> -->
 </div>
 {% endblock %}
 
