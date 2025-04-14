@@ -48,17 +48,33 @@
 
     .btn-white { border-color: white; color: white; }
     .btn-white:hover { background-color: white; color: #111; }
+
+    .btn-dark { border-color: #ccc; color: #ccc; }
+    .btn-dark:hover { background-color: #ccc; color: #111; }
 </style>
 
 <div class="dashboard-container">
     <h2>📘 Admin Dashboard</h2>
 
+    <!-- Admin functionalities -->
     <a href="{% url 'register_employee' %}" class="dashboard-btn btn-green">➕ Register New Employee</a>
-    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-blue">📚 View Book Inventory</a>
-    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-red">🗑️ Remove a Book</a>
+    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-blue">📚 Manage Book Inventory</a>
     <a href="{% url 'add_book' %}" class="dashboard-btn btn-green">➕ Add a Book</a>
-    <a href="{% url 'view_books_admin' %}" class="dashboard-btn btn-yellow">✏️ Edit a Book</a>
     <a href="{% url 'admin:index' %}" target="_blank" class="dashboard-btn btn-white">⚙️ Open Django Admin Panel</a>
+
+    <hr style="margin: 40px 0; border-color: #555;">
+
+    <!-- Librarian functionalities -->
+    <h2>📘 Librarian Dashboard</h2>
+    <a href="{% url 'search_books' %}" class="dashboard-btn btn-blue">🔍 Search Books</a>
+    <a href="{% url 'register_client' %}" class="dashboard-btn btn-green">🧑‍💻 Register New Client</a>
+    <a href="{% url 'borrow_book' %}" class="dashboard-btn btn-yellow">📖 Rent a Book</a>
+    <a href="{% url 'return_book' %}" class="dashboard-btn btn-red">↩️ Return a Book</a>
+    <a href="{% url 'assigned_books' %}" class="dashboard-btn btn-white">📋 View Assigned Books</a>
+
+    <hr style="margin: 40px 0; border-color: #555;">
+
+    <!-- Logout -->
+    <a href="{% url 'logout' %}" class="dashboard-btn btn-dark">🚪 Log Out</a>
 </div>
 {% endblock %}
-

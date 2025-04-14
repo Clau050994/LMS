@@ -2,7 +2,23 @@
 {% block content %}
 <div class="container mt-5">
   <h2>Register New Client</h2>
-  <form method="POST">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+    <script>
+      // Reset form after success message
+      window.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById("clientForm");
+        if (form) form.reset();
+      });
+    </script>
+  {% endif %}
+
+  <form method="POST" id="clientForm">
     {% csrf_token %}
 
     <!-- Name -->
@@ -36,6 +52,11 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Register Client</button>
+    {% if request.user.role == 'admin' %}
+  <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary">← Back to Dashboard</a>
+{% else %}
+  <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary">← Back to Dashboard</a>
+{% endif %}
   </form>
 </div>
 {% endblock %}

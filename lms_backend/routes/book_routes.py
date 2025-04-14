@@ -6,9 +6,11 @@ from .decorators import role_required
 # ✅ Define the blueprint
 book_bp = Blueprint('book_bp', __name__)
 
-@book_bp.route('', methods=['GET'])
+@book_bp.route('/', methods=['GET'])
 def list_books():
-    return jsonify(get_books())
+    books = get_books()
+    print("📚 Books being returned:", books)  
+    return jsonify(books)
 
 @book_bp.route('', methods=['POST'])
 def create_book():

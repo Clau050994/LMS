@@ -19,10 +19,12 @@
                     <td>{{ rental.client_email }}</td>
                     <td>{{ rental.book_title }}</td>
                     <td>{{ rental.rented_on }}</td>
+                    <td>{{rental.due_date}}</td>
                     <td>
                         <form method="POST">
                             {% csrf_token %}
                             <input type="hidden" name="rental_id" value="{{ rental.rental_id }}">
+                            <input type="hidden" name="book_id" value="{{ rental.book_id }}">
                             <button type="submit" class="btn btn-success">Return</button>
                         </form>
                     </td>
@@ -30,6 +32,10 @@
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary">Back to Dashboard</a>
+    {% if request.user.role == 'admin' %}
+    <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary">← Back to Dashboard</a>
+  {% else %}
+    <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary">← Back to Dashboard</a>
+  {% endif %}
 </div>
 {% endblock %}

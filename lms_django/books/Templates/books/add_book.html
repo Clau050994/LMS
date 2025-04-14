@@ -1,8 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="container mt-5 text-white">
   <h2>Add a New Book</h2>
+
+  <!-- Feedback message -->
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
   <form method="POST">
     {% csrf_token %}
 
@@ -31,7 +42,7 @@
     </div>
 
     <button type="submit" class="btn btn-success">Add Book</button>
-    <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary ms-2">Cancel</a>
+    <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary ms-2">← Back to Admin Dashboard</a>
   </form>
 </div>
 {% endblock %}

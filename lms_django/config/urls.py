@@ -13,7 +13,7 @@ urlpatterns = [
 
     # Authentication
     path("login/", views.RoleBasedLoginView.as_view(template_name="books/login.html"), name="login"),
-    path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
+    path("logout/", LogoutView.as_view(), name="logout"),
     path("register/", views.register, name="register"),
 
     # Librarian + Book functionality
@@ -33,6 +33,8 @@ urlpatterns = [
     path("books/add/", views.add_book, name="add_book"),
     path("books/edit/<str:book_id>/", views.edit_book, name="edit_book"),
     path("books/delete/<str:book_id>/", views.delete_book, name="delete_book"),
+    path("books/assigned/", views.assigned_books, name="assigned_books"),
+
 
     # Django admin panel
     path("admin/", admin.site.urls),

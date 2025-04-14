@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5 text-white">
+    <h2 class="text-center mb-4">📚 Assigned Books</h2>
+
+    {% if assigned_books %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-dark align-middle">
+            <thead class="table-light text-dark">
+                <tr>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in assigned_books %}
+                <tr>
+                    <td>{{ item.book_title|default:"Unknown" }}</td>
+                    <td>{{ item.client_name|default:"Unknown" }}</td>
+                    <td>{{ item.due_date|default:"N/A" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center">
+        No currently assigned books.
+    </div>
+    {% endif %}
+
+    <!-- 🔙 Back to Dashboard -->
+    <div class="text-center mt-4">
+        {% if request.user.role == 'admin' %}
+            <a href="{% url 'dashboard_admin' %}" class="btn btn-secondary">← Back to Admin Dashboard</a>
+        {% else %}
+            <a href="{% url 'dashboard_librarian' %}" class="btn btn-secondary">← Back to Librarian Dashboard</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

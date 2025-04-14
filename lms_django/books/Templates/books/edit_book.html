@@ -1,26 +1,105 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="container mt-5">
+<style>
+  body {
+    background-color: #111;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .form-container {
+    max-width: 600px;
+    margin: 80px auto;
+    background-color: #222;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .form-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #fff;
+  }
+
+  .form-control, .btn {
+    border-radius: 6px;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
+    color: #111;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+
+  .alert {
+    margin-top: 10px;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .back-link a {
+    color: #17a2b8;
+    text-decoration: none;
+  }
+
+  .back-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="form-container">
   <h2>Edit Book</h2>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+
   <form method="POST">
     {% csrf_token %}
     <div class="mb-3">
       <label>Book ID to Edit:</label>
-      <input type="text" name="book_id" class="form-control" required>
+      <input type="text" name="book_id" class="form-control" value="{{ book_data.id|default:'' }}" required>
     </div>
     <div class="mb-3">
       <label>New Title:</label>
-      <input type="text" name="title" class="form-control">
+      <input type="text" name="title" class="form-control" value="{{ book_data.title|default:'' }}">
     </div>
     <div class="mb-3">
       <label>New Author:</label>
-      <input type="text" name="author" class="form-control">
+      <input type="text" name="author" class="form-control" value="{{ book_data.author|default:'' }}">
     </div>
     <div class="mb-3">
       <label>New Genre:</label>
-      <input type="text" name="genre" class="form-control">
+      <input type="text" name="genre" class="form-control" value="{{ book_data.genre|default:'' }}">
+    </div>
+    <div class="mb-3">
+      <label>ISBN:</label>
+      <input type="text" name="isbn" class="form-control" value="{{ book_data.isbn|default:'' }}" readonly>
     </div>
     <button type="submit" class="btn btn-warning">Update Book</button>
   </form>
+
+  <div class="back-link">
+    <a href="{% url 'dashboard_admin' %}">← Back to Admin Dashboard</a>
+  </div>
 </div>
 {% endblock %}
