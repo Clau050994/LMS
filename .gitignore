@@ -1,5 +1,8 @@
 # Ignore virtual environment
 venv/
+**/.venv/
+**/venv/
+./lms_django/.venv/
 .env
 
 # Ignore Firebase configuration (contains sensitive credentials)
