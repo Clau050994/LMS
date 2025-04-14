@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  body {
+    background-color: #111;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .container {
+    margin-top: 50px;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+
+  .book-card {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+  }
+
+  .book-card:hover {
+    background-color: #2b2b2b;
+    transform: translateY(-2px);
+  }
+
+  .book-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .book-info {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  .btn-action {
+    margin-right: 10px;
+    padding: 5px 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .btn-edit {
+    background-color: rgb(20, 130, 221);
+    color: #FFF;
+  }
+
+  .btn-delete {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .btn-edit:hover {
+    background-color: #e0a800;
+  }
+
+  .btn-delete:hover {
+    background-color: #c82333;
+  }
+
+  .back-btn {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background-color: #444;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #666;
+  }
+</style>
+
+<div class="container">
+  <h2>📚 Total Books: {{ total_books }}</h2>
+  <div class="row">
+    {% for book in books %}
+    <div class="col-md-4">
+      <div class="book-card">
+        <div class="book-title">{{ book.title }}</div>
+        <div class="book-info"><strong>Author:</strong> {{ book.author }}</div>
+        <div class="book-info"><strong>Genre:</strong> {{ book.genre }}</div>
+        <div>
+          <a href="{% url 'edit_book' book.id %}" class="btn-action btn-edit">Edit</a>
+          <a href="{% url 'delete_book' book.id %}" class="btn-action btn-delete">Delete</a>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+      <p class="text-white">No books available in the inventory.</p>
+    {% endfor %}
+  </div>
+
+  <a href="{% url 'dashboard_admin' %}" class="back-btn">← Back to Dashboard</a>
+</div>
+{% endblock %}

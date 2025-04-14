@@ -39,6 +39,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 5px;
         }
         .login-container button:hover {
             background-color: #0056b3;
@@ -47,14 +48,19 @@
 </head>
 <body>
 
-    <div class="login-container">
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-    </div>
+<div class="login-container">
+    <h2>Login</h2>
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- Hidden input to track which button was pressed -->
+        <input type="hidden" name="next_role" id="next_role" value="librarian">
+
+        <button type="submit" onclick="document.getElementById('next_role').value='librarian'">Login as Librarian</button>
+        <button type="submit" onclick="document.getElementById('next_role').value='admin'">Login as Admin</button>
+    </form>
+</div>
 
 </body>
 </html>

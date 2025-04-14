@@ -1,5 +1,6 @@
 from config import db
 
+
 def add_book(title, author, genre):
     """Add book to Firestore"""
     doc_ref = db.collection("books").add({"title": title, "author": author, "genre": genre})

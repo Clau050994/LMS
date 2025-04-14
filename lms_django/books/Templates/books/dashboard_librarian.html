@@ -8,16 +8,19 @@
         color: white;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .dashboard-container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 0 auto;
         padding: 40px 20px;
     }
+
     .dashboard-container h2 {
         text-align: center;
         margin-bottom: 40px;
         font-size: 2rem;
     }
+
     .btn {
         padding: 12px;
         font-weight: bold;
@@ -25,32 +28,60 @@
         border: none;
         transition: background-color 0.3s ease;
     }
+
     .btn-outline-primary {
         background-color: transparent;
         border: 2px solid #007bff;
         color: #007bff;
     }
+
     .btn-outline-primary:hover {
         background-color: #007bff;
         color: white;
     }
+
     .btn-outline-success {
         background-color: transparent;
         border: 2px solid #28a745;
         color: #28a745;
     }
+
     .btn-outline-success:hover {
         background-color: #28a745;
         color: white;
     }
+
     .btn-outline-warning {
         background-color: transparent;
         border: 2px solid #ffc107;
         color: #ffc107;
     }
+
     .btn-outline-warning:hover {
         background-color: #ffc107;
         color: black;
+    }
+
+    .btn-outline-info {
+        background-color: transparent;
+        border: 2px solid #17a2b8;
+        color: #17a2b8;
+    }
+
+    .btn-outline-info:hover {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+    .btn-outline-danger {
+        background-color: transparent;
+        border: 2px solid #dc3545;
+        color: #dc3545;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
     }
 </style>
 
@@ -58,19 +89,24 @@
     <h2>Welcome Librarian {{ request.user.username|capfirst }}</h2>
     
     <div class="row text-center">
-        <!-- Search Books -->
         <div class="col-md-4 mb-3">
             <a href="{% url 'search_books' %}" class="btn btn-outline-primary w-100">Search Books</a>
         </div>
 
-        <!-- Register New Client -->
         <div class="col-md-4 mb-3">
             <a href="{% url 'register_client' %}" class="btn btn-outline-success w-100">Register New Client</a>
         </div>
 
-        <!-- Borrow a Book -->
         <div class="col-md-4 mb-3">
-            <a href="{% url 'borrow_book' %}" class="btn btn-outline-warning w-100">Assign/Rent a Book</a>
+            <a href="{% url 'borrow_book' %}" class="btn btn-outline-warning w-100">Rent a Book</a>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'return_book' %}" class="btn btn-outline-danger w-100">Return a Book</a>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'view_books_admin' %}" class="btn btn-outline-info w-100">View Assigned Books</a>
         </div>
     </div>
 </div>

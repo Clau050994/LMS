@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Register New Client</h2>
+  <form method="POST">
+    {% csrf_token %}
+
+    <!-- Name -->
+    <div class="mb-3">
+      <label for="id_username">Name:</label>
+      <input type="text" name="username" id="id_username" class="form-control" required>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="id_email">Email:</label>
+      <input type="email" name="email" id="id_email" class="form-control" required>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="mb-3">
+      <label for="id_phone">Phone Number:</label>
+      <input type="text" name="phone" id="id_phone" class="form-control" required>
+    </div>
+
+    <!-- Address -->
+    <div class="mb-3">
+      <label for="id_address">Address:</label>
+      <input type="text" name="address" id="id_address" class="form-control">
+    </div>
+
+    <!-- Driver's License -->
+    <div class="mb-3">
+      <label for="id_drivers_license">Driver's License:</label>
+      <input type="text" name="drivers_license" id="id_drivers_license" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register Client</button>
+  </form>
+</div>
+{% endblock %}
