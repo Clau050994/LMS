@@ -11,6 +11,7 @@ from .forms import EmployeeRegistrationForm
 from django.utils.timezone import make_aware
 from datetime import datetime
 from pytz import timezone
+from django.contrib import messages
 
 import requests
 from datetime import datetime
@@ -52,13 +53,19 @@ def dashboard_librarian(request):
 class RoleBasedLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
-        requested_role = self.request.POST.get("next_role")
+
         if hasattr(user, "role"):
+            print(f"User role: {user.role}")
             if user.role == "admin":
-                return "/dashboard/admin/" if requested_role == "admin" else "/dashboard/librarian/"
+                return "/dashboard/admin/"
             elif user.role == "librarian":
                 return "/dashboard/librarian/"
-        return "/"
+            else:
+                messages.error(self.request, "Unknown role. Contact support.")
+                return "/login/"
+        else:
+            messages.error(self.request, "User has no role assigned.")
+            return "/login/"
 
 
 def register(request):
