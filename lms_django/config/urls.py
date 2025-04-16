@@ -12,7 +12,7 @@ urlpatterns = [
     path("dashboard/librarian/", views.dashboard_librarian, name="dashboard_librarian"),
 
     # Authentication
-    path("login/", views.RoleBasedLoginView.as_view(template_name="books/login.html"), name="login"),
+    path("login/", views.RoleBasedLoginView.as_view(template_name="books/dashboard.html"), name="login"),
     path("logout/", LogoutView.as_view(), name="logout"),
     path("register/", views.register, name="register"),
 
