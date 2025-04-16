@@ -8,16 +8,15 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.models import User
 from django.conf import settings
 from .forms import EmployeeRegistrationForm
-from django.utils.timezone import localtime, now, utc
+from django.utils.timezone import localtime, now
 from django.utils.dateformat import format as django_format
 from django.contrib import messages
 import requests
-from datetime import datetime
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os
 from books import views
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Firebase setup
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -230,7 +229,7 @@ def return_book(request):
                 if hasattr(rented_on_raw, 'timestamp'):
                     dt = rented_on_raw
                 elif isinstance(rented_on_raw, dict) and 'seconds' in rented_on_raw:
-                    dt = datetime.fromtimestamp(rented_on_raw['seconds'], tz=utc)
+                    dt = datetime.fromtimestamp(rented_on_raw['seconds'], timezone.utc)
                 else:
                     dt = rented_on_raw
                 rented_on = django_format(localtime(dt), "F j, Y, g:i A")
