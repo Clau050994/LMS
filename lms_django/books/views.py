@@ -17,6 +17,10 @@ from firebase_admin import credentials, firestore
 import os
 from books import views
 from datetime import datetime, timezone
+from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime, timedelta, timezone
+from django.contrib.auth.views import LoginView
+
 
 # Firebase setup
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +33,6 @@ db = firestore.client()
 
 # Flask API
 FLASK_API_URL = "http://127.0.0.1:5000/books"
-
 
 # Main dashboard
 def dashboard(request):
@@ -62,7 +65,7 @@ class RoleBasedLoginView(LoginView):
         else:
             messages.error(self.request, "User has no role assigned.")
             return "/login/"
-        return self.request.path 
+        return self.request.path
 
 def register(request):
     if request.method == "POST":
@@ -76,44 +79,148 @@ def register(request):
     return render(request, "books/register.html", {"form": form})
 
 
-@login_required
 def search_books(request):
-    query = request.GET.get('query', '').strip().lower()
+    query = request.GET.get("query", "").strip()
     books = []
-    client_map = {}
 
-    try:
-        # 🔁 Fetch from Flask API
-        response = requests.get(FLASK_API_URL)
-        response.raise_for_status()
-        books = response.json()
-
-        # 🧠 Fetch clients from Firestore
-        clients = db.collection("clients").stream()
-        client_map = {client.id: client.to_dict().get("full_name", "Unknown") for client in clients}
-
-        # ✅ Loop through books and enhance display
-        for book in books:
-            rented_by_id = (book.get("rented_by") or "").strip()
-            book["rented_by"] = client_map.get(rented_by_id, "None") if rented_by_id else "None"
-
-            # 🔥 TRUST 'available' from backend — don't recompute it
-            book["available"] = True if book.get("available") is True else False
-
-    except Exception as e:
-        print("Error fetching books or clients:", e)
-        books = []
-
-    # 🔍 Search filter
     if query:
-        books = [book for book in books if query in book.get("title", "").lower()]
+        # Fetch from Firebase (internal)
+        try:
+            docs = db.collection("books").stream()
+            for doc in docs:
+                data = doc.to_dict()
+                if query.lower() in data.get("title", "").lower():
+                    books.append({
+                        "title": data.get("title", "No Title"),
+                        "authors": data.get("author", "Unknown"),
+                        "description": data.get("description", "No description available."),
+                        "publisher": data.get("publisher", "Unknown"),
+                        "published_date": data.get("published_date", "Unknown"),
+                        "thumbnail": data.get("thumbnail", ""),
+                        "source": "internal",
+                        "available": data.get("available", True),
+                        "rented_by": data.get("rented_by", "N/A")
+                    })
+        except Exception as e:
+            print("Firebase error:", e)
+
+        # Fetch from Google Books
+        try:
+            g_response = requests.get(
+                "https://www.googleapis.com/books/v1/volumes",
+                params={"q": query}
+            )
+            if g_response.status_code == 200:
+                g_books = g_response.json().get("items", [])
+                for item in g_books:
+                    info = item.get("volumeInfo", {})
+                    books.append({
+                        "title": info.get("title", "No Title"),
+                        "authors": ", ".join(info.get("authors", ["Unknown"])),
+                        "description": info.get("description", "No description available."),
+                        "publisher": info.get("publisher", "Unknown"),
+                        "published_date": info.get("publishedDate", "Unknown"),
+                        "thumbnail": info.get("imageLinks", {}).get("thumbnail", ""),
+                        "source": "google",
+                        "available": True,
+                        "rented_by": ""
+                    })
+        except Exception as e:
+            print("Google Books API error:", e)
 
     return render(request, "books/search_books.html", {
         "books": books,
         "query": query
     })
 
+def borrow_google_book(request):
+    if request.method == "POST":
+        data = request.POST
+        try:
+            book_data = {
+                "title": data.get("title"),
+                "authors": data.get("authors"),
+                "publisher": data.get("publisher"),
+                "published_date": data.get("published_date"),
+                "thumbnail": data.get("thumbnail"),
+                "description": data.get("description"),
+                "available": False,
+                "rented_by": data.get("client_id"),
+                "source": "google"
+            }
 
+            # Save to Firestore
+            book_ref = db.collection("books").add(book_data)
+
+            client_id = data.get("client_id")
+            client_ref = db.collection("clients").document(client_id).get()
+            client_data = client_ref.to_dict() if client_ref.exists else {}
+
+            db.collection("rentals").add({
+                "book_id": book_ref[1].id,
+                "client_id": client_id,
+                "client_name": client_data.get("name", "Unknown"),
+                "email": client_data.get("email", "Unknown"),
+                "rented_at": now(),
+                "due_date": now() + timedelta(days=14),
+                "returned": False
+            })
+
+            messages.success(request, f"Book '{data.get('title')}' borrowed successfully.")
+
+        except Exception as e:
+            messages.error(request, f"Failed to borrow book: {str(e)}")
+
+        return redirect("search_books")
+    return redirect('search_books')
+
+def borrow_internal_book(request):
+    if request.method == "POST":
+        try:
+            book_id = request.POST.get("book_id")
+            client_id = request.POST.get("client_id")
+
+            if not book_id or not client_id:
+                messages.error(request, "Missing book ID or client ID.")
+                return redirect("search_books")
+
+            book_ref = db.collection("books").document(book_id)
+
+
+            # Fetch the book from Firebase
+            book_ref = db.collection("books").document(book_id)
+            book_snapshot = book_ref.get()
+
+            if book_snapshot.exists:
+                book_data = book_snapshot.to_dict()
+
+                if not book_data.get("available", True):
+                    messages.error(request, "This book is already borrowed.")
+                    return redirect("search_books")
+
+                # Update the book to mark it as borrowed
+                book_ref.update({
+                    "available": False,
+                    "rented_by": client_id
+                })
+                messages.success(request, "Book borrowed successfully.")
+                # Add to rentals collection
+                db.collection("rentals").add({
+                    "book_id": book_ref[1].id,
+                    "client_id": client_id,
+                    "client_name": client_data.get("name", "Unknown"),
+                    "email": client_data.get("email", "Unknown"),
+                    "rented_at": now(),
+                    "due_date": now() + timedelta(days=14),
+                    "returned": False
+                })
+            else:
+                messages.error(request, "Book not found.")
+        except Exception as e:
+            messages.error(request, f"Error borrowing book: {e}")
+
+        return redirect("search_books")
+    return redirect("search_books")
 
 @login_required
 @role_required(['admin', 'librarian'])
@@ -144,12 +251,17 @@ def borrow_book(request):
                 })
 
                 # Step 2: Add a rental record with returned set to False
+                client_ref = db.collection("clients").document(client_id).get()
+                client_data = client_ref.to_dict() if client_ref.exists else {}
+
                 db.collection("rentals").add({
                     "book_id": book_id,
                     "client_id": client_id,
+                    "client_name": client_data.get("name", "Unknown"),
+                    "email": client_data.get("email", "Unknown"),
                     "rented_at": now(),
                     "due_date": due_date,
-                    "returned": False  # ✅ Important field
+                    "returned": False
                 })
 
                 messages.success(request, "Book rented successfully!")
@@ -172,15 +284,23 @@ def return_book(request):
         rental_id = request.POST.get("rental_id")
         book_id = request.POST.get("book_id")
         print("Rental ID:", rental_id)
-        print("Book IDz:", book_id)
+        print("Book ID:", book_id)
 
+        # Step 1: Fetch the book from Firestore
+        book_ref = db.collection("books").document(book_id)
+        book_snapshot = book_ref.get()
+
+        # Check if the book exists
+        if not book_snapshot.exists:
+            messages.error(request, "Book not found.")
+            return redirect('return_book')
 
         # ✅ Step 1: Update book availability
         try:
             db.collection("books").document(book_id).update({
-                    "available": True,
-                    "rented_by": ""    
-                })
+                "available": True,
+                "rented_by": ""
+            })
             print("Book availability updated successfully.")
         except Exception as e:
             print("Error updating book:", e)
@@ -208,18 +328,31 @@ def return_book(request):
         client_data = {"full_name": "Unknown", "email": "Unknown"}
         client_id = rental.get("client_id")
         if client_id:
-            client_doc = db.collection("clients").document(client_id).get()
+            client_doc = db.collection("clients").document(str(client_id)).get()
             if client_doc.exists:
                 client_data = client_doc.to_dict()
 
-        # 🔄 Get book info
+        # 🔄 Get book info (robust handling of DocumentReference or string ID)
         book_data = {"title": "Unknown"}
-        book_id = rental.get("book_id")
-        print("Book ID:", book_id)
-        if book_id:
-            book_doc = db.collection("books").document(book_id).get()
+        book_id = "Unknown"
+
+        book_ref = rental.get("book_id")
+        print("DEBUG - book_ref:", book_ref, "type:", type(book_ref))
+
+        try:
+            if isinstance(book_ref, firestore.DocumentReference):
+                book_doc = book_ref.get()
+                book_id = book_ref.id
+            elif isinstance(book_ref, str):
+                book_doc = db.collection("books").document(book_ref).get()
+                book_id = book_ref
+            else:
+                raise ValueError(f"Unexpected book_ref type: {type(book_ref)}")
+
             if book_doc.exists:
                 book_data = book_doc.to_dict()
+        except Exception as e:
+            print("Error fetching book data:", e)
 
         # 📅 Format rental date
         rented_on = "Unknown"
@@ -248,7 +381,6 @@ def return_book(request):
         })
 
     return render(request, "books/return_book.html", {"rentals": rentals})
-
 
 @login_required
 @role_required(['admin', 'librarian'])
@@ -287,30 +419,31 @@ def register_employee(request):
     return render(request, 'books/register_employee.html', {'form': form})
 
 
-
-@login_required
-@role_required(['admin'])
 def view_books_admin(request):
     books_ref = db.collection("books")
-    books = []
+    docs = books_ref.stream()
 
-    for doc in books_ref.stream():
+    books = []
+    for doc in docs:
         data = doc.to_dict()
-        book = {
+
+        # Parse and safely extract values
+        books.append({
             "id": doc.id,
-            "title": data.get("title", "N/A"),
-            "author": data.get("author", "N/A"),
+            "title": data.get("title", "No Title"),
+            "author": data.get("author", "Unknown"),
             "genre": data.get("genre", "N/A"),
             "isbn": data.get("isbn", "N/A"),
-            # Don't include 'available' or 'rented_by'
-        }
-        books.append(book)
+            "publisher": data.get("publisher", "Unknown"),
+            "available": data.get("available", True),
+            "rented_by": data.get("rented_by", "")
+        })
 
-    total_books = len(books)
     return render(request, "books/view_books_admin.html", {
         "books": books,
-        "total_books": total_books
+        "total_books": len(books)
     })
+
 
 @login_required
 @role_required(['admin'])
@@ -378,7 +511,8 @@ def delete_book(request, book_id):
 
 def logout(request):
     auth_logout(request)
-    return redirect("login")
+    messages.info(request, "You Have Logged Out.")
+    return redirect('dashboard')
 
 
 # books/views.py

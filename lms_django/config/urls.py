@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from books import views
 from django.contrib.auth.views import LogoutView
+from books import views
 
 urlpatterns = [
     # Home dashboard
@@ -13,7 +14,7 @@ urlpatterns = [
 
     # Authentication
     path("login/", views.RoleBasedLoginView.as_view(template_name="books/dashboard.html"), name="login"),
-    path("logout/", LogoutView.as_view(), name="logout"),
+    path('logout/', views.logout, name='logout'),
     path("register/", views.register, name="register"),
 
     # Librarian + Book functionality
@@ -21,7 +22,8 @@ urlpatterns = [
     path("borrow/", views.borrow_book, name="borrow_book"),
     path("return/", views.return_book, name="return_book"),
 
-
+path("borrow_google_book/", views.borrow_google_book, name="borrow_google_book"),
+path("borrow_internal_book/", views.borrow_internal_book, name="borrow_internal_book"),
 
 
     # Admin: employee and librarian management

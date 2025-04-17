@@ -38,7 +38,7 @@
 
 <div class="login-card">
     <h1>Welcome to LMS System</h1>
-    
+
     <form method="post" action="{% url 'login' %}">
         {% csrf_token %}
         <div class="mb-3">
@@ -51,14 +51,24 @@
         </div>
         <!-- <button type="submit" class="btn-lms">Login as Librarian</button> -->
         <button type="submit" class="btn-lms">Login</button>
-        {% if messages %}
+       {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-danger mt-3">{{ message }}</div>
+                    <div class="alert alert-info mt-3">{{ message }}</div>
             {% endfor %}
-        {% endif %}
+       {% endif %}
+        <script>
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                    alert.style.transition = "opacity 0.5s ease-out";
+                    alert.style.opacity = 0;
+                    setTimeout(() => alert.style.display = 'none', 500);
+                });
+            }, 2000); // message disappears after 3 seconds
+        </script>
+
     </form>
 
     <!-- <a href="{% url 'dashboard_admin' %}" class="btn-lms">Admin Dashboard Access</a> -->
 </div>
 {% endblock %}
-
