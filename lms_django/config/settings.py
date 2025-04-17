@@ -30,9 +30,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
 ]
 
-# You can define the message storage backend (this is the default):
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
-
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 LOGIN_URL = "login"  # use named URL instead of raw string path
